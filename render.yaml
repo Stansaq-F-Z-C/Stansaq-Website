@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: stansaq-website
+    runtime: node
+    plan: starter          # NOT "free" — the free tier spins down after 15 min
+                            # idle, which is unacceptable for a client-facing site
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY_HTTPS
+        value: "true"       # Render terminates HTTPS at the edge from the start —
+                             # no certbot wait, unlike the VPS path
+      - key: SESSION_SECRET
+        sync: false          # set manually in the dashboard — never store secrets in this file
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+
+# This file documents the required configuration; it does not contain secrets.
+# On first deploy, Render will prompt you to fill in each "sync: false" value
+# in the dashboard. PORT is provided automatically by Render — do not set it.

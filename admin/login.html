@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Stansaq F.Z.C.</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--panel); }
+    .login-card { width: 100%; max-width: 380px; border: 1px solid var(--line); background: var(--white); padding: 40px; }
+    .login-card h1 { font-size: 20px; margin-bottom: 6px; }
+    .login-card .eyebrow { margin-bottom: 24px; }
+    .error-msg { color: var(--orange); font-size: 13px; margin-top: 4px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <p class="eyebrow">Stansaq / Admin</p>
+    <h1>Sign in</h1>
+    <form id="login-form">
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <p class="error-msg" id="error-msg">Invalid credentials.</p>
+      <button type="submit" class="btn btn-accent" style="width:100%; justify-content:center; margin-top:8px;">Sign in</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var errorMsg = document.getElementById('error-msg');
+      errorMsg.style.display = 'none';
+      var body = {
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
+      };
+      try {
+        var res = await fetch('/admin/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) { errorMsg.style.display = 'block'; return; }
+        window.location.href = '/admin/dashboard.html';
+      } catch (err) {
+        errorMsg.textContent = 'Could not reach the server.';
+        errorMsg.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

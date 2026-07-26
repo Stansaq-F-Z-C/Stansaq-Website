@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Stansaq F.Z.C.</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="/index.html" class="logo"><span class="mark"></span>STANSAQ<span class="suffix">Admin</span></a>
+      <div class="header-actions">
+        <span id="whoami" class="text-steel" style="font-family:var(--f-mono); font-size:13px;"></span>
+        <button id="logout-btn" class="btn btn-outline" style="padding:10px 18px;">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 48px 56px 96px;">
+
+    <section id="partners-section" style="margin-bottom:72px;">
+      <div class="section-head" style="margin-bottom:32px;">
+        <div>
+          <span class="section-index">§ 01</span>
+          <h2>Principal Partners</h2>
+        </div>
+        <p class="desc">Companies represented on the public Principal Partners page and home ticker.</p>
+      </div>
+
+      <form id="partner-form" class="admin-form" enctype="multipart/form-data">
+        <input type="hidden" id="partner-id" value="">
+        <div class="form-grid">
+          <div class="field">
+            <label for="partner-name">Company name</label>
+            <input id="partner-name" name="name" type="text" required>
+          </div>
+          <div class="field">
+            <label for="partner-tagline">Tagline</label>
+            <input id="partner-tagline" name="tagline" type="text" placeholder="e.g. Polyurethane raw materials">
+          </div>
+          <div class="field full">
+            <label for="partner-description">Description</label>
+            <textarea id="partner-description" name="description" required></textarea>
+          </div>
+          <div class="field full">
+            <label for="partner-applications">Applications (one per line)</label>
+            <textarea id="partner-applications" name="applications" placeholder="Cast polyurethane elastomers&#10;Coating and lamination resins"></textarea>
+          </div>
+          <div class="field">
+            <label for="partner-logo">Logo image</label>
+            <input id="partner-logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+          </div>
+        </div>
+        <div class="admin-form-actions">
+          <button type="submit" class="btn btn-accent" id="partner-submit-btn">Add company</button>
+          <button type="button" class="btn btn-outline" id="partner-cancel-btn" style="display:none;">Cancel edit</button>
+        </div>
+      </form>
+
+      <div id="partners-list" class="admin-list"></div>
+    </section>
+
+    <section id="products-section">
+      <div class="section-head" style="margin-bottom:32px;">
+        <div>
+          <span class="section-index">§ 02</span>
+          <h2>Products</h2>
+        </div>
+        <p class="desc">Products can be linked to a principal company, or left unlinked as general listings.</p>
+      </div>
+
+      <form id="product-form" class="admin-form" enctype="multipart/form-data">
+        <input type="hidden" id="product-id" value="">
+        <div class="form-grid">
+          <div class="field">
+            <label for="product-name">Product name</label>
+            <input id="product-name" name="name" type="text" required>
+          </div>
+          <div class="field">
+            <label for="product-partner">Linked company</label>
+            <select id="product-partner" name="partner_id">
+              <option value="">— None —</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="product-description">Description</label>
+            <textarea id="product-description" name="description" required></textarea>
+          </div>
+          <div class="field">
+            <label for="product-image">Product image</label>
+            <input id="product-image" name="image" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+          </div>
+        </div>
+        <div class="admin-form-actions">
+          <button type="submit" class="btn btn-accent" id="product-submit-btn">Add product</button>
+          <button type="button" class="btn btn-outline" id="product-cancel-btn" style="display:none;">Cancel edit</button>
+        </div>
+      </form>
+
+      <div id="products-list" class="admin-list"></div>
+    </section>
+
+  </main>
+
+  <script src="/admin/admin.js"></script>
+</body>
+</html>
