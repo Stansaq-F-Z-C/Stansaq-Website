@@ -3,6 +3,14 @@ const supabase = require('../db/supabaseClient');
 
 const router = express.Router();
 
+// Never echo raw Supabase/Postgres error details to an anonymous visitor —
+// that can leak schema names, query structure, or internal state. Log the
+// real error server-side and return a generic message to the client.
+function handleDbError(res, err) {
+  console.error('Public API error:', err.message);
+  res.status(500).json({ error: 'Something went wrong. Please try again shortly.' });
+}
+
 function serializePartner(row) {
   return {
     id: row.id,
@@ -30,7 +38,7 @@ router.get('/partners', async (req, res) => {
     .select('*')
     .order('sort_order', { ascending: true })
     .order('id', { ascending: true });
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) return handleDbError(res, error);
   res.json(data.map(serializePartner));
 });
 
@@ -40,7 +48,7 @@ router.get('/partners/:id', async (req, res) => {
     .select('*')
     .eq('id', req.params.id)
     .maybeSingle();
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) return handleDbError(res, error);
   if (!data) return res.status(404).json({ error: 'Not found' });
   res.json(serializePartner(data));
 });
@@ -53,7 +61,7 @@ router.get('/products', async (req, res) => {
     .order('id', { ascending: true });
   if (req.query.partner_id) query = query.eq('partner_id', req.query.partner_id);
   const { data, error } = await query;
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) return handleDbError(res, error);
   res.json(data.map(serializeProduct));
 });
 

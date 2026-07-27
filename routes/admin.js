@@ -4,11 +4,23 @@ const crypto = require('crypto');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const rateLimit = require('express-rate-limit');
+const FileType = require('file-type');
 const supabase = require('../db/supabaseClient');
 const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 const STORAGE_BUCKET = 'uploads';
+
+const FIELD_LIMITS = { name: 200, tagline: 200, description: 5000, applications: 5000 };
+function validateLengths(fields) {
+  for (const [key, max] of Object.entries(FIELD_LIMITS)) {
+    const val = fields[key];
+    if (val && String(val).length > max) {
+      return `${key} is too long (max ${max} characters).`;
+    }
+  }
+  return null;
+}
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -31,8 +43,37 @@ const upload = multer({
   }
 });
 
+const ALLOWED_RASTER_MIME = new Set(['image/jpeg', 'image/png', 'image/webp']);
+const SVG_DANGER_PATTERN = /<script[\s>]|javascript:|on\w+\s*=/i;
+
+async function verifyFileContent(file) {
+  const ext = path.extname(file.originalname).toLowerCase();
+
+  if (ext === '.svg') {
+    // file-type can't magic-byte-detect SVG (it's text, not binary), so this
+    // is a heuristic denylist, not a full sanitizer. It blocks the common
+    // stored-XSS vectors (inline <script>, javascript: URIs, on* handlers)
+    // but isn't exhaustive. If SVG uploads become a real, frequently-used
+    // feature, replace this with a proper sanitizer library.
+    const text = file.buffer.toString('utf8');
+    if (SVG_DANGER_PATTERN.test(text)) {
+      throw new Error('SVG rejected: contains a script tag, event handler, or javascript: URI.');
+    }
+    return;
+  }
+
+  // For raster formats, verify the actual file content — not just the
+  // extension or the client-supplied Content-Type, both of which an
+  // attacker fully controls — matches an allowed image type.
+  const detected = await FileType.fromBuffer(file.buffer);
+  if (!detected || !ALLOWED_RASTER_MIME.has(detected.mime)) {
+    throw new Error('File content does not match a supported image type.');
+  }
+}
+
 async function uploadToStorage(file) {
   if (!file) return null;
+  await verifyFileContent(file);
   const ext = path.extname(file.originalname).toLowerCase();
   const filename = `${crypto.randomBytes(10).toString('hex')}${ext}`;
   const { error } = await supabase.storage
@@ -102,6 +143,8 @@ router.post('/api/partners', upload.single('logo'), async (req, res, next) => {
   try {
     const { name, tagline, description, applications } = req.body;
     if (!name) return res.status(400).json({ error: 'Name is required' });
+    const lengthErr = validateLengths({ name, tagline, description, applications });
+    if (lengthErr) return res.status(400).json({ error: lengthErr });
 
     const { data: maxRow } = await supabase
       .from('partners').select('sort_order').order('sort_order', { ascending: false }).limit(1).maybeSingle();
@@ -121,6 +164,8 @@ router.post('/api/partners', upload.single('logo'), async (req, res, next) => {
 router.put('/api/partners/:id', upload.single('logo'), async (req, res, next) => {
   try {
     const { name, tagline, description, applications } = req.body;
+    const lengthErr = validateLengths({ name, tagline, description, applications });
+    if (lengthErr) return res.status(400).json({ error: lengthErr });
     const { data: existing, error: fetchErr } = await supabase
       .from('partners').select('*').eq('id', req.params.id).maybeSingle();
     if (fetchErr) throw fetchErr;
@@ -170,6 +215,8 @@ router.post('/api/products', upload.single('image'), async (req, res, next) => {
   try {
     const { name, description, partner_id } = req.body;
     if (!name) return res.status(400).json({ error: 'Name is required' });
+    const lengthErr = validateLengths({ name, description });
+    if (lengthErr) return res.status(400).json({ error: lengthErr });
 
     const { data: maxRow } = await supabase
       .from('products').select('sort_order').order('sort_order', { ascending: false }).limit(1).maybeSingle();
@@ -189,6 +236,8 @@ router.post('/api/products', upload.single('image'), async (req, res, next) => {
 router.put('/api/products/:id', upload.single('image'), async (req, res, next) => {
   try {
     const { name, description, partner_id } = req.body;
+    const lengthErr = validateLengths({ name, description });
+    if (lengthErr) return res.status(400).json({ error: lengthErr });
     const { data: existing, error: fetchErr } = await supabase
       .from('products').select('*').eq('id', req.params.id).maybeSingle();
     if (fetchErr) throw fetchErr;
@@ -235,6 +284,9 @@ router.use((err, req, res, next) => {
   }
   if (err && err.message === 'Unsupported image type') {
     return res.status(400).json({ error: 'Unsupported image type — use JPG, PNG, WEBP or SVG.' });
+  }
+  if (err && (err.message.startsWith('SVG rejected') || err.message.startsWith('File content does not match'))) {
+    return res.status(400).json({ error: err.message });
   }
   console.error('Admin route error:', err);
   res.status(500).json({ error: 'Something went wrong on the server.' });
