@@ -44,7 +44,16 @@ app.use(helmet({
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],
-      frameAncestors: ["'none'"]
+      frameAncestors: ["'none'"],
+      // Only tell browsers to upgrade http:// sub-resource requests to https://
+      // once HTTPS is actually live. On plain-HTTP local dev (npm start,
+      // localhost, no TLS listener), this directive silently breaks every
+      // CSS/JS/image load — the browser tries to upgrade each request to
+      // https, that fails against a server with no HTTPS, and the resource
+      // just never loads. This is why CSS can vanish under "npm start" while
+      // working fine when opening the HTML file directly (file:// sends no
+      // CSP header at all, so it was never affected).
+      upgradeInsecureRequests: HTTPS_LIVE ? [] : null
     }
   },
   // Only tell browsers to force HTTPS once HTTPS is actually live — enabling

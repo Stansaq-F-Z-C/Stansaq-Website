@@ -1,0 +1,20 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#1B1E20" stroke-width="3" stroke-linejoin="miter" stroke-linecap="square">
+    <!-- hopper -->
+    <polyline points="22,20 40,20 36,34 26,34"/>
+    <!-- barrel -->
+    <rect x="26" y="34" width="52" height="16"/>
+    <!-- die -->
+    <polyline points="78,34 92,40 92,44 78,50"/>
+  </g>
+  <!-- support legs -->
+  <g stroke="#1B1E20" stroke-width="1.5">
+    <line x1="34" y1="50" x2="34" y2="64"/>
+    <line x1="70" y1="50" x2="70" y2="64"/>
+  </g>
+  <!-- extruded strand -->
+  <line x1="92" y1="42" x2="108" y2="42" stroke="#B08D4E" stroke-width="4"/>
+  <!-- take-up rollers -->
+  <circle cx="98" cy="58" r="6" fill="none" stroke="#1B1E20" stroke-width="1.5"/>
+  <circle cx="98" cy="70" r="6" fill="none" stroke="#1B1E20" stroke-width="1.5"/>
+</svg>

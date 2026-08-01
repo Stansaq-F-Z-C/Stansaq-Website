@@ -1,0 +1,10 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#1B1E20" stroke-width="3" stroke-linejoin="miter" stroke-linecap="square">
+    <rect x="26" y="34" width="60" height="60"/>
+  </g>
+  <!-- peeled corner flap -->
+  <path d="M86,34 L104,46 L104,66 L86,72 Z" fill="none" stroke="#1B1E20" stroke-width="3" stroke-linejoin="miter"/>
+  <!-- adhesive underside highlight -->
+  <path d="M86,72 L104,66 L104,46 L86,34" fill="none" stroke="#B08D4E" stroke-width="1.5"/>
+  <line x1="86" y1="34" x2="104" y2="46" stroke="#B08D4E" stroke-width="3"/>
+</svg>

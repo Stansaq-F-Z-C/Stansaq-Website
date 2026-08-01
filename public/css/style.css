@@ -602,6 +602,7 @@ h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; margin: 0; let
   border-top: 1px solid var(--line);
 }
 .solution-block:first-child { border-top: none; }
+.solution-head .icon { width: 56px; height: 56px; margin-bottom: 18px; display: block; }
 .solution-head .idx { font-family: var(--f-mono); color: var(--gold); font-size: 13px; }
 .solution-head h3 { font-size: 24px; margin: 10px 0 12px; }
 .solution-head p { color: var(--steel); font-size: 14.5px; margin: 0; }

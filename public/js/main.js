@@ -20,13 +20,13 @@ document.addEventListener('DOMContentLoaded', function () {
   var revealSelector = '.card, .entity-cell, .article-card, .solution-block, .timeline-step, .section-head, .spec-row, .hero-copy, .logo-slot';
   var sharedIo = ('IntersectionObserver' in window)
     ? new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          sharedIo.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 })
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            sharedIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 })
     : null;
 
   function applyReveal(root) {
@@ -161,4 +161,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   })();
 });
-

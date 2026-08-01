@@ -1,0 +1,10 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#1B1E20" stroke-width="3">
+    <circle cx="60" cy="60" r="38"/>
+  </g>
+  <circle cx="60" cy="60" r="26" fill="none" stroke="#B08D4E" stroke-width="4"/>
+  <circle cx="60" cy="60" r="15" fill="none" stroke="#1B1E20" stroke-width="1.5"/>
+  <!-- wall-thickness leader line -->
+  <line x1="60" y1="60" x2="60" y2="22" stroke="#1B1E20" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="82" y1="38" x2="94" y2="26" stroke="#1B1E20" stroke-width="1"/>
+</svg>
