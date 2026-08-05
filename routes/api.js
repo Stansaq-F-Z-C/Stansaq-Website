@@ -32,6 +32,17 @@ function serializeProduct(row) {
   };
 }
 
+function serializeInsight(row) {
+  return {
+    id: row.id,
+    title: row.title,
+    category: row.category,
+    excerpt: row.excerpt,
+    imagePath: row.image_path || null,
+    publishedDate: row.published_date
+  };
+}
+
 router.get('/partners', async (req, res) => {
   const { data, error } = await supabase
     .from('partners')
@@ -63,6 +74,19 @@ router.get('/products', async (req, res) => {
   const { data, error } = await query;
   if (error) return handleDbError(res, error);
   res.json(data.map(serializeProduct));
+});
+
+router.get('/insights', async (req, res) => {
+  let query = supabase
+    .from('insights')
+    .select('*')
+    .order('published_date', { ascending: false })
+    .order('id', { ascending: false });
+  const limit = parseInt(req.query.limit, 10);
+  if (!isNaN(limit) && limit > 0) query = query.limit(limit);
+  const { data, error } = await query;
+  if (error) return handleDbError(res, error);
+  res.json(data.map(serializeInsight));
 });
 
 module.exports = router;

@@ -1,4 +1,4 @@
-// Stansaq F.Z.C. — shared site behaviour
+// Stansaq — shared site behaviour
 document.addEventListener('DOMContentLoaded', function () {
 
   // Scroll progress rail
@@ -114,23 +114,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Category filter on Insights page (client-side, no page reload)
-  var catLinks = document.querySelectorAll('.category-bar a[data-filter]');
-  var articles = document.querySelectorAll('.article-card');
-  if (catLinks.length && articles.length) {
-    catLinks.forEach(function (link) {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        catLinks.forEach(function (l) { l.classList.remove('active'); });
-        link.classList.add('active');
-        var filter = link.getAttribute('data-filter');
-        articles.forEach(function (card) {
-          var cats = (card.getAttribute('data-categories') || '').split(' ');
-          card.style.display = (filter === 'all' || cats.indexOf(filter) !== -1) ? '' : 'none';
-        });
-      });
-    });
-  }
+  // Category filtering for the Insights page is handled by insights.js,
+  // since it needs to run after that page's content loads asynchronously.
 
   // Contact form: prevent real submission in this static template, show a confirmation state.
   var form = document.querySelector('.enquiry-form');

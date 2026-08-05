@@ -11,7 +11,7 @@ const { requireAuth } = require('../middleware/auth');
 const router = express.Router();
 const STORAGE_BUCKET = 'uploads';
 
-const FIELD_LIMITS = { name: 200, tagline: 200, description: 5000, applications: 5000 };
+const FIELD_LIMITS = { name: 200, tagline: 200, description: 5000, applications: 5000, title: 200, category: 60, excerpt: 1000 };
 function validateLengths(fields) {
   for (const [key, max] of Object.entries(FIELD_LIMITS)) {
     const val = fields[key];
@@ -267,6 +267,85 @@ router.delete('/api/products/:id', async (req, res, next) => {
 
     await removeFromStorage(existing.image_path);
     const { error } = await supabase.from('products').delete().eq('id', req.params.id);
+    if (error) throw error;
+    res.json({ ok: true });
+  } catch (err) { next(err); }
+});
+
+// ---------------------------------------------------------------------------
+// Insights
+// ---------------------------------------------------------------------------
+router.get('/api/insights', async (req, res, next) => {
+  try {
+    const { data, error } = await supabase.from('insights').select('*')
+      .order('published_date', { ascending: false }).order('id', { ascending: false });
+    if (error) throw error;
+    res.json(data);
+  } catch (err) { next(err); }
+});
+
+router.post('/api/insights', upload.single('image'), async (req, res, next) => {
+  try {
+    const { title, category, excerpt, published_date } = req.body;
+    if (!title) return res.status(400).json({ error: 'Title is required' });
+    const lengthErr = validateLengths({ title, category, excerpt });
+    if (lengthErr) return res.status(400).json({ error: lengthErr });
+
+    const { data: maxRow } = await supabase
+      .from('insights').select('sort_order').order('sort_order', { ascending: false }).limit(1).maybeSingle();
+    const nextOrder = maxRow ? maxRow.sort_order + 1 : 0;
+
+    const imageUrl = await uploadToStorage(req.file);
+
+    const insertPayload = {
+      title, category: category || '', excerpt: excerpt || '',
+      image_path: imageUrl, sort_order: nextOrder
+    };
+    if (published_date) insertPayload.published_date = published_date;
+
+    const { data, error } = await supabase.from('insights').insert(insertPayload).select('id').single();
+    if (error) throw error;
+    res.json({ id: data.id });
+  } catch (err) { next(err); }
+});
+
+router.put('/api/insights/:id', upload.single('image'), async (req, res, next) => {
+  try {
+    const { title, category, excerpt, published_date } = req.body;
+    const lengthErr = validateLengths({ title, category, excerpt });
+    if (lengthErr) return res.status(400).json({ error: lengthErr });
+    const { data: existing, error: fetchErr } = await supabase
+      .from('insights').select('*').eq('id', req.params.id).maybeSingle();
+    if (fetchErr) throw fetchErr;
+    if (!existing) return res.status(404).json({ error: 'Not found' });
+
+    let imageUrl = existing.image_path;
+    if (req.file) {
+      await removeFromStorage(existing.image_path);
+      imageUrl = await uploadToStorage(req.file);
+    }
+
+    const updatePayload = {
+      title: title || existing.title, category: category || '', excerpt: excerpt || '',
+      image_path: imageUrl, updated_at: new Date().toISOString()
+    };
+    if (published_date) updatePayload.published_date = published_date;
+
+    const { error } = await supabase.from('insights').update(updatePayload).eq('id', req.params.id);
+    if (error) throw error;
+    res.json({ ok: true });
+  } catch (err) { next(err); }
+});
+
+router.delete('/api/insights/:id', async (req, res, next) => {
+  try {
+    const { data: existing, error: fetchErr } = await supabase
+      .from('insights').select('*').eq('id', req.params.id).maybeSingle();
+    if (fetchErr) throw fetchErr;
+    if (!existing) return res.status(404).json({ error: 'Not found' });
+
+    await removeFromStorage(existing.image_path);
+    const { error } = await supabase.from('insights').delete().eq('id', req.params.id);
     if (error) throw error;
     res.json({ ok: true });
   } catch (err) { next(err); }

@@ -5,8 +5,8 @@
 // consistent — it does NOT prove anything about a real Supabase project,
 // real network behavior, real RLS enforcement, or real Storage behavior.
 
-const tables = { admin_users: [], partners: [], products: [] };
-let nextId = { admin_users: 1, partners: 1, products: 1 };
+const tables = { admin_users: [], partners: [], products: [], insights: [] };
+let nextId = { admin_users: 1, partners: 1, products: 1, insights: 1 };
 const storageFiles = new Map(); // filename -> buffer
 
 function clone(row) { return row ? JSON.parse(JSON.stringify(row)) : row; }

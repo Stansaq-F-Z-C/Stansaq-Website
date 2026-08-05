@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/icons/favicon-192.png" width="72" alt="Stansaq F.Z.C.">
+  <img src="public/icons/favicon-192.png" width="72" alt="Stansaq">
 </p>
 
-<h1 align="center">Stansaq F.Z.C. — Corporate Website</h1>
+<h1 align="center">Stansaq — Corporate Website</h1>
 
 <p align="center">
   Industrial materials representation, presented the way an established
@@ -13,7 +13,7 @@
 
 ## About
 
-Stansaq F.Z.C. is a Sharjah-based representation and market-development
+Stansaq is a Sharjah-based representation and market-development
 company for specialist polymer, elastomer, and industrial materials
 manufacturers across the Middle East. This repository is the company's
 public website: a Swiss-grid, minimalist corporate site with a live-editable
@@ -104,4 +104,4 @@ assembled before a live deployment existed to screenshot._
 
 ## License
 
-Proprietary — © Stansaq F.Z.C. Not licensed for reuse.
+Proprietary — © Stansaq. Not licensed for reuse.

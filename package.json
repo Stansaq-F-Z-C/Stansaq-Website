@@ -2,7 +2,7 @@
   "name": "stansaq-site",
   "version": "1.0.0",
   "private": true,
-  "description": "Stansaq F.Z.C. corporate website with dynamic Principal Partners and Products, backed by Supabase.",
+  "description": "Stansaq corporate website with dynamic Principal Partners and Products, backed by Supabase.",
   "main": "server.js",
   "engines": {
     "node": ">=18.0.0"

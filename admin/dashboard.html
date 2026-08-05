@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Stansaq F.Z.C.</title>
+  <title>Admin Dashboard | Stansaq</title>
   <meta name="robots" content="noindex, nofollow">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
@@ -104,6 +104,48 @@
       </form>
 
       <div id="products-list" class="admin-list"></div>
+    </section>
+
+    <section id="insights-section">
+      <div class="section-head" style="margin-bottom:32px;">
+        <div>
+          <span class="section-index">§ 03</span>
+          <h2>Insights</h2>
+        </div>
+        <p class="desc">Articles shown on the Insights page and as the latest 3 on the home page.</p>
+      </div>
+
+      <form id="insight-form" class="admin-form" enctype="multipart/form-data">
+        <input type="hidden" id="insight-id" value="">
+        <div class="form-grid">
+          <div class="field">
+            <label for="insight-title">Title</label>
+            <input id="insight-title" name="title" type="text" required>
+          </div>
+          <div class="field">
+            <label for="insight-category">Category</label>
+            <input id="insight-category" name="category" type="text" placeholder="e.g. Polyurethane">
+          </div>
+          <div class="field full">
+            <label for="insight-excerpt">Excerpt</label>
+            <textarea id="insight-excerpt" name="excerpt" required></textarea>
+          </div>
+          <div class="field">
+            <label for="insight-date">Published date</label>
+            <input id="insight-date" name="published_date" type="date">
+          </div>
+          <div class="field">
+            <label for="insight-image">Image</label>
+            <input id="insight-image" name="image" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+          </div>
+        </div>
+        <div class="admin-form-actions">
+          <button type="submit" class="btn btn-accent" id="insight-submit-btn">Add insight</button>
+          <button type="button" class="btn btn-outline" id="insight-cancel-btn" style="display:none;">Cancel edit</button>
+        </div>
+      </form>
+
+      <div id="insights-list" class="admin-list"></div>
     </section>
 
   </main>

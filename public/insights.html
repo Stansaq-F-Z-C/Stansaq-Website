@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Insights | Stansaq F.Z.C.</title>
-  <meta name="description" content="Technical notes on polymer materials, industrial standards and Middle East market practice from Stansaq F.Z.C.">
+  <title>Insights | Stansaq</title>
+  <meta name="description" content="Technical notes on polymer materials, industrial standards and Middle East market practice from Stansaq">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
   <div class="scroll-rail" aria-hidden="true"><div class="scroll-rail-fill"></div></div>
   <header class="site-header">
     <div class="container">
-      <a href="index.html" class="logo"><span class="mark"></span>STANSAQ<span class="suffix">F.Z.C.</span></a>
+      <a href="index.html" class="logo"><span class="mark"></span>STANSAQ</a>
       <nav class="nav-primary" aria-label="Primary">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
@@ -45,62 +45,12 @@
 
   <section class="section" style="padding-top:0;">
     <div class="container">
-      <nav class="category-bar" aria-label="Insight categories"><a href="#" data-filter="all" class="active">All</a><a href="#" data-filter="polyurethane" class="">Polyurethane</a><a href="#" data-filter="infrastructure" class="">Infrastructure</a><a href="#" data-filter="packaging" class="">Packaging</a><a href="#" data-filter="equipment" class="">Equipment</a><a href="#" data-filter="standards" class="">Standards</a></nav>
-      <div class="article-grid">
-        <article class="article-card" data-categories="polyurethane">
-          <div class="img-placeholder"><span class="tag">FIG — PU casting</span></div>
-          <span class="meta">Polyurethane / 12 Jun 2026</span>
-          <h3>Specifying cast PU elastomers for high-abrasion rubber components</h3>
-          <p>What changes when a rubber compounder substitutes a cast polyurethane system, and where the specification work actually sits.</p>
-        </article>
-        <article class="article-card" data-categories="infrastructure">
-          <div class="img-placeholder"><span class="tag">FIG — Pipe lining crew</span></div>
-          <span class="meta">Infrastructure / 03 May 2026</span>
-          <h3>Cured-in-place lining versus pipe replacement: a cost comparison framework</h3>
-          <p>A structured way to compare trenchless rehabilitation against open-cut replacement on total project cost.</p>
-        </article>
-        <article class="article-card" data-categories="packaging">
-          <div class="img-placeholder"><span class="tag">FIG — Film roll stock</span></div>
-          <span class="meta">Packaging / 19 Apr 2026</span>
-          <h3>Barrier film selection for medical packaging in Gulf climates</h3>
-          <p>How ambient humidity and cold-chain gaps change film specification for medical packaging converters.</p>
-        </article>
-        <article class="article-card" data-categories="equipment">
-          <div class="img-placeholder"><span class="tag">FIG — Extrusion line control panel</span></div>
-          <span class="meta">Equipment / 27 Mar 2026</span>
-          <h3>Commissioning an extrusion line: what to check before first production run</h3>
-          <p>A practical checklist for the commissioning phase of a new rubber or cable extrusion line.</p>
-        </article>
-        <article class="article-card" data-categories="polyurethane">
-          <div class="img-placeholder"><span class="tag">FIG — PU coating application</span></div>
-          <span class="meta">Polyurethane / 14 Feb 2026</span>
-          <h3>Moisture management in polyurethane coating application</h3>
-          <p>Common causes of coating defects linked to substrate and ambient moisture, and how to control for them on site.</p>
-        </article>
-        <article class="article-card" data-categories="standards">
-          <div class="img-placeholder"><span class="tag">FIG — Lab testing equipment</span></div>
-          <span class="meta">Standards / 22 Jan 2026</span>
-          <h3>Reading a technical data sheet: what the numbers actually tell a converter</h3>
-          <p>A guide to interpreting tensile, elongation and barrier figures on a film or elastomer data sheet.</p>
-        </article>
-        <article class="article-card" data-categories="infrastructure">
-          <div class="img-placeholder"><span class="tag">FIG — Sewer pipe section</span></div>
-          <span class="meta">Infrastructure / 08 Jan 2026</span>
-          <h3>Sizing a liner for variable-diameter sewer sections</h3>
-          <p>Practical considerations for liner sizing where pipe diameter or condition varies along a run.</p>
-        </article>
-        <article class="article-card" data-categories="standards">
-          <div class="img-placeholder"><span class="tag">FIG — Shipping documentation</span></div>
-          <span class="meta">Standards / 15 Dec 2025</span>
-          <h3>Import documentation for polymer raw materials into the UAE and wider Gulf</h3>
-          <p>An overview of the classification and documentation steps that most often delay polymer shipments.</p>
-        </article>
-        <article class="article-card" data-categories="packaging">
-          <div class="img-placeholder"><span class="tag">FIG — Packaging film rolls</span></div>
-          <span class="meta">Packaging / 02 Dec 2025</span>
-          <h3>Flexible packaging film trends among Gulf converters</h3>
-          <p>Observed shifts in barrier film specification among regional flexible packaging converters.</p>
-        </article></div>
+      <nav class="category-bar" aria-label="Insight categories" id="insights-category-bar">
+        <a href="#" data-filter="all" class="active">All</a>
+      </nav>
+      <div class="article-grid" id="insights-article-grid">
+        <p class="empty-state text-steel">Loading insights…</p>
+      </div>
     </div>
   </section>
 
@@ -114,7 +64,7 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <a href="index.html" class="logo" style="color:#fff;"><span class="mark"></span>STANSAQ<span class="suffix" style="color:rgba(255,255,255,0.55);">F.Z.C.</span></a>
+          <a href="index.html" class="logo" style="color:#fff;"><span class="mark"></span>STANSAQ</a>
           <p style="margin-top:16px; max-width:34ch;">Representing specialist polymer, elastomer and industrial materials manufacturers across the Middle East.</p>
         </div>
         <div>
@@ -142,11 +92,12 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>&copy; 2026 Stansaq F.Z.C. All rights reserved.</span>
+        <span>&copy; 2026 Stansaq. All rights reserved.</span>
         <span>Registered in the Sharjah Airport International Free Zone, U.A.E.</span>
       </div>
     </div>
   </footer>
   <script src="js/main.js"></script>
+  <script src="js/insights.js"></script>
 </body>
 </html>

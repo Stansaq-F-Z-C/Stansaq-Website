@@ -64,8 +64,23 @@
         fetch('/api/partners'),
         fetch('/api/products')
       ]);
+
+      if (!partnersRes.ok) {
+        // The partners fetch itself failed — there's nothing meaningful to render.
+        throw new Error('Partners request failed: ' + partnersRes.status);
+      }
       var partners = await partnersRes.json();
-      var products = await productsRes.json();
+
+      // Products are supplementary — if that request fails, still show the
+      // partner list; each partner's "products from this company" section
+      // is small and non-essential compared to the list existing at all.
+      var products = [];
+      if (productsRes.ok) {
+        var productsData = await productsRes.json();
+        if (Array.isArray(productsData)) products = productsData;
+      } else {
+        console.error('Products request failed (' + productsRes.status + ') — showing partners without linked products.');
+      }
 
       if (!partners.length) {
         listEl.innerHTML = '<p class="empty-state text-steel">No principal partners published yet.</p>';

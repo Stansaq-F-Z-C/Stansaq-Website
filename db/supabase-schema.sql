@@ -30,6 +30,18 @@ create table if not exists products (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists insights (
+  id bigint generated always as identity primary key,
+  title text not null,
+  category text,
+  excerpt text,
+  image_path text,
+  published_date date not null default current_date,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 -- Row Level Security: enable it, and add NO policies for anon/authenticated roles.
 -- This means the public anon key gets zero access to these tables, full stop.
 -- Your Express backend uses the service_role key, which bypasses RLS entirely by
@@ -37,3 +49,4 @@ create table if not exists products (
 alter table admin_users enable row level security;
 alter table partners enable row level security;
 alter table products enable row level security;
+alter table insights enable row level security;

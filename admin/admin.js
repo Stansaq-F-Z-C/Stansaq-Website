@@ -1,5 +1,5 @@
 (function () {
-  var state = { partners: [], products: [] };
+  var state = { partners: [], products: [], insights: [] };
 
   function escapeHtml(str) {
     return (str || '').replace(/[&<>"']/g, function (c) {
@@ -208,7 +208,95 @@
   });
 
   // ---------------------------------------------------------------------
+  // Insights
+  // ---------------------------------------------------------------------
+  var insightForm = document.getElementById('insight-form');
+  var insightIdField = document.getElementById('insight-id');
+  var insightSubmitBtn = document.getElementById('insight-submit-btn');
+  var insightCancelBtn = document.getElementById('insight-cancel-btn');
+
+  async function loadInsights() {
+    var res = await fetch('/admin/api/insights');
+    state.insights = await res.json();
+    renderInsights();
+  }
+
+  function renderInsights() {
+    var list = document.getElementById('insights-list');
+    if (!state.insights.length) {
+      list.innerHTML = '<p class="empty-state">No insights yet — add the first one above.</p>';
+      return;
+    }
+    list.innerHTML = state.insights.map(function (i) {
+      var thumb = i.image_path
+        ? '<img src="' + i.image_path + '" alt="">'
+        : 'No image';
+      var meta = escapeHtml(i.category || '') + (i.published_date ? ' · ' + escapeHtml(i.published_date) : '');
+      return (
+        '<div class="admin-row" data-id="' + i.id + '">' +
+          '<div class="thumb">' + thumb + '</div>' +
+          '<div><h4>' + escapeHtml(i.title) + '</h4><p>' + meta + '</p></div>' +
+          '<div class="row-actions">' +
+            '<button type="button" data-action="edit-insight">Edit</button>' +
+            '<button type="button" data-action="delete-insight" class="danger">Delete</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function resetInsightForm() {
+    insightForm.reset();
+    insightIdField.value = '';
+    insightSubmitBtn.textContent = 'Add insight';
+    insightCancelBtn.style.display = 'none';
+  }
+
+  insightForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var id = insightIdField.value;
+    var formData = new FormData(insightForm);
+    var url = id ? '/admin/api/insights/' + id : '/admin/api/insights';
+    var method = id ? 'PUT' : 'POST';
+    var res = await fetch(url, { method: method, body: formData });
+    if (!res.ok) { alert('Could not save insight.'); return; }
+    resetInsightForm();
+    loadInsights();
+  });
+
+  insightCancelBtn.addEventListener('click', resetInsightForm);
+
+  document.getElementById('insights-list').addEventListener('click', async function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var row = e.target.closest('.admin-row');
+    var id = row.getAttribute('data-id');
+    var insight = state.insights.find(function (i) { return String(i.id) === id; });
+
+    if (btn.dataset.action === 'edit-insight') {
+      insightIdField.value = insight.id;
+      document.getElementById('insight-title').value = insight.title || '';
+      document.getElementById('insight-category').value = insight.category || '';
+      document.getElementById('insight-excerpt').value = insight.excerpt || '';
+      document.getElementById('insight-date').value = insight.published_date || '';
+      insightSubmitBtn.textContent = 'Save changes';
+      insightCancelBtn.style.display = 'inline-flex';
+      insightForm.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    if (btn.dataset.action === 'delete-insight') {
+      if (!confirm('Delete "' + insight.title + '"?')) return;
+      var res = await fetch('/admin/api/insights/' + id, { method: 'DELETE' });
+      if (!res.ok) { alert('Could not delete insight.'); return; }
+      loadInsights();
+    }
+  });
+
+  // ---------------------------------------------------------------------
   checkSession().then(function () {
-    loadPartners().then(loadProducts);
+    loadPartners().then(function () {
+      loadProducts();
+      loadInsights();
+    });
   });
 })();
